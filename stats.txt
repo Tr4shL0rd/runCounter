@@ -1,5 +1,0 @@
-Run Start: 13:12:21
-Run  Stop: 13:12:27
-Time Spent Farming Killavolt: 0:00:06
-Runs: 231
-Time Spent per Run: 0.03 seconds
