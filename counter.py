@@ -1,7 +1,7 @@
 from sys import argv
 import datetime
 
-#fmt = "%H:%M:%S"
+fmt = "%H:%M:%S"
 statsPath = "dataFiles/stats.txt"
 namePath  = "dataFiles/name.txt"
 runsPath  = "dataFiles/runs.txt"
@@ -11,7 +11,7 @@ def exportStats():
         statsFile.write(stats())
 
 def getTime():
-    return datetime.datetime.now().strftime("%H:%M:%S")
+    return datetime.datetime.now().strftime(fmt)
 
 def getName():
     with open(namePath, "r+") as nameFile:
@@ -51,7 +51,7 @@ def endTime():
         startFile.write(f"\n{getTime()}")
 
 def timeDiff():
-    td = datetime.datetime.strptime(getStop(), "%H:%M:%S") - datetime.datetime.strptime(getStart(), "%H:%M:%S")
+    td = datetime.datetime.strptime(getStop(), fmt) - datetime.datetime.strptime(getStart(), fmt)
     return td
 
 def stats():
