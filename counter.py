@@ -2,33 +2,36 @@ from sys import argv
 import datetime
 
 #fmt = "%H:%M:%S"
-
+statsPath = "dataFiles/stats.txt"
+namePath  = "dataFiles/name.txt"
+runsPath  = "dataFiles/runs.txt"
+timePath  = "dataFiles/startTime.txt"
 def exportStats():
-    with open("stats.txt", "r+") as statsFile:
+    with open(statsPath, "r+") as statsFile:
         statsFile.write(stats())
 
 def getTime():
     return datetime.datetime.now().strftime("%H:%M:%S")
 
 def getName():
-    with open("name.txt", "r+") as nameFile:
+    with open(namePath, "r+") as nameFile:
         name = nameFile.read()
         return name
 def getRuns():
-    with open("runs.txt", "r+") as runFile:
+    with open(runsPath, "r+") as runFile:
         runs = runFile.read()
         return runs
 def getStart():
-    with open("startTime.txt", "r+") as startFile:
+    with open(timePath, "r+") as startFile:
         start = startFile.readlines()[0]
         return start.replace("\n", "")
 def getStop():
-    with open("startTime.txt", "r+") as startFile:
+    with open(timePath, "r+") as startFile:
         stop = startFile.readlines()[1]
         return stop.replace("\n", "")
 
 def add():
-    with open("runs.txt", "r+") as runFile:
+    with open(runsPath, "r+") as runFile:
         runs = runFile.read()
         runFile.seek(0)
         if runs == "0":
@@ -38,13 +41,13 @@ def add():
         print(f"{getTime()} {getName()} Run: {newRun}")
 
 def startTime():
-    with open("startTime.txt", "r+") as startFile:
+    with open(timePath, "r+") as startFile:
         startFile.seek(0)
         startFile.truncate()
         startFile.write(f"{getTime()}")
 
 def endTime():
-    with open("startTime.txt", "a") as startFile:
+    with open(timePath, "a") as startFile:
         startFile.write(f"\n{getTime()}")
 
 def timeDiff():
@@ -65,7 +68,7 @@ def stats():
     return text
 
 def reset():
-    with open("runs.txt", "r+") as runFile:
+    with open(runsPath, "r+") as runFile:
         print(stats())
         exportStats()
         runFile.seek(0)
@@ -76,14 +79,14 @@ def reset():
         return '\nReset'
 
 def naming(Name):
-    with open("name.txt", "r+") as nameFile:
+    with open(namePath, "r+") as nameFile:
         nameFile.truncate()
         nameFile.write(Name)
         reset()
         return Name
 
 def resetName():
-    with open("name.txt", "r+") as nameFile:
+    with open(namePath, "r+") as nameFile:
         nameFile.seek(0)
         nameFile.truncate()
         nameFile.write("")
