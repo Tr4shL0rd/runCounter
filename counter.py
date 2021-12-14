@@ -4,6 +4,10 @@ from os import listdir
 from os.path import isfile, join
 from typing import Iterable
 
+#    TODO
+# * save files
+# * load files
+
 fmt = "%H:%M:%S"
 statsPath     = "dataFiles/stats.txt"
 namePath      = "dataFiles/name.txt"
@@ -125,7 +129,7 @@ def loadSave():
     for index, name in saves.items():
         print(f"{index} {name}")
     choice = input("enter name or index of saveFile: ")
-    if choice in saves.values() or choice in saves.keys():
+    if choice in saves.values() or int(choice) in saves.keys():
         print("True")
     else:
         print("False")
