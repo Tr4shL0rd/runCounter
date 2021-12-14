@@ -1,15 +1,24 @@
 from sys import argv
 import datetime
+from os import listdir
+from os.path import isfile, join
+from typing import Iterable
 
 fmt = "%H:%M:%S"
-statsPath = "dataFiles/stats.txt"
-namePath  = "dataFiles/name.txt"
-runsPath  = "dataFiles/runs.txt"
-timePath  = "dataFiles/startTime.txt"
+statsPath     = "dataFiles/stats.txt"
+namePath      = "dataFiles/name.txt"
+runsPath      = "dataFiles/runs.txt"
+timePath      = "dataFiles/startTime.txt"
+profilesPath  = "dataFiles/profiles/"
+
 def exportStats():
     with open(statsPath, "r+") as statsFile:
         statsFile.write(stats())
 
+def getStartTime():
+    with open(timePath, "r+") as startFile:
+        start = startFile.readlines()[0]
+        return start.replace("\n", "")
 def getTime():
     return datetime.datetime.now().strftime(fmt)
 
@@ -29,6 +38,10 @@ def getStop():
     with open(timePath, "r+") as startFile:
         stop = startFile.readlines()[1]
         return stop.replace("\n", "")
+def getProfiles():
+    profiles = [f for f in listdir(profilesPath)
+                if isfile(join(profilesPath,f))]
+    return profiles
 
 def add():
     with open(runsPath, "r+") as runFile:
@@ -91,6 +104,31 @@ def resetName():
         nameFile.truncate()
         nameFile.write("")
 
+def dataSave(saveFileName, runStart, runs, name):
+    runStart = getStartTime()
+    runs     = getRuns()
+    name     = getName()
+    with open(f"{profilesPath}{saveFileName}.txt", "a+") as statsFile:
+        statsFile.seek(0)
+        statsFile.write("")
+        statsFile.write(f"{runStart}\n{runs}\n{name}")
+
+def loadSave():
+    profiles = getProfiles()
+    i = 0
+    saves = {}
+    for p in iter(profiles):
+        i += 1
+        fileName,_,_ = p.partition(".")
+        saves[i] = fileName 
+    
+    for index, name in saves.items():
+        print(f"{index} {name}")
+    choice = input("enter name or index of saveFile: ")
+    if choice in saves.values() or choice in saves.keys():
+        print("True")
+    else:
+        print("False")
 try:
     if argv[1] == '-r': # stops the session
         print(reset())
@@ -102,9 +140,12 @@ try:
         stats()
     elif argv[1] == "-w": # setup Wizard
         print("Welcome to the setup Wizard")
-        name = input("Please enter name of your farm: ")
+        name    = input("Please enter name of your farm: ")
+        saveName = name.lower().replace(" ", "")#input("Save File Name: ").lower().replace(" ", "")
         naming(name)
         exit()
+    elif argv[1] == "save":
+        dataSave(input("save file name: "), getStartTime(), getRuns(), getName())
     elif argv[1] == "-h": # prints help
         print("""python counter.py 
             -r:    reset 
@@ -114,4 +155,6 @@ try:
             \n""",end="")
         
 except IndexError:
-    add()
+    #add()
+    loadSave()
+    #dataSave(saveName, getStartTime(), getRuns(), getName())
