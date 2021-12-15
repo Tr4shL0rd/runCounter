@@ -108,6 +108,14 @@ def resetName():
         nameFile.truncate()
         nameFile.write("")
 
+def readFile(fileName):
+    with open(fileName, "r") as f:
+        lines = f.readlines()
+    for l in lines:
+        print(l.replace("\n",""))
+        #return f.readlines()
+        
+
 def dataSave(saveFileName, runStart, runs, name):
     runStart = getStartTime()
     runs     = getRuns()
@@ -125,14 +133,24 @@ def loadSave():
         i += 1
         fileName,_,_ = p.partition(".")
         saves[i] = fileName 
-    
-    for index, name in saves.items():
-        print(f"{index} {name}")
-    choice = input("enter name or index of saveFile: ")
-    if choice in saves.values() or int(choice) in saves.keys():
-        print("True")
+    #print(sorted(saves.items(), reverse=True))
+    for index, name in sorted(saves.items(),reverse=True):
+        print(f"{index}: {name}")
+    try:
+        choice = int(input("enter index of saveFile: "))
+        print() # Line Seperator for input and output of file
+
+    except ValueError:
+        print("lol ValueError!\n")
+        loadSave()
+    if choice in saves.keys():
+        print(saves[choice])
+        readFile(f"{profilesPath}{saves[choice]}.txt")
+
     else:
-        print("False")
+        print("Save File not found or corrupt!")
+        print(f"Default saveFile Path: {profilesPath}")
+
 try:
     if argv[1] == '-r': # stops the session
         print(reset())
